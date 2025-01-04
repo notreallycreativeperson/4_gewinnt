@@ -3,10 +3,17 @@ import java.util.Scanner;
 import java.util.Random;
 
 public class Game {
+
     private int[][]gameBord = new int[7][6];
     int player;
+    static boolean[][][] directions=new boolean[7][6][4];
     public Game(){
+        setDirections();
         player = setPlayer(0);//2 = kreis beginnt, 3 heißt zufälliger Spieler beginnt, default kreuz gebinnt
+        game();
+    }
+
+    private void game(){
         boolean gameContinues = true;
         while(gameContinues){
             int[][] bord;
@@ -18,7 +25,12 @@ public class Game {
                 row = getRow(bord,move);
             }
             bord[move][row]=player;
-            player=(player==1?2:1);
+            if (Main.is_won(bord)){
+                displayBord(bord);
+                System.out.println("Spieler "+(player==-1?2:1)+" hat gewonnen!");
+                break;
+            }
+            player=(player==1?-1:1);
             displayBord(bord);
             setGameBord(bord);
 
@@ -29,16 +41,15 @@ public class Game {
         }
     }
 
-
     private int setPlayer(int mode){
         int player;
         switch (mode){
             case 2:
-                player=2;
+                player=-1;
             case 3:{
                 Random rand= new Random();
                 if (rand.nextInt(2)==0) player = 1;
-                else player = 2;
+                else player = -1;
             }
             default:{
                 player =1;
@@ -61,7 +72,7 @@ public class Game {
     }
 
     private int getMove(int player){
-        System.out.println("Spieler "+player+" ist am Zug.  " +"Bitte gib eine Spaltennummer von 1 bis 7.7");
+        System.out.println("Spieler "+(player==-1?2:player)+" ist am Zug.  " +"Bitte gib eine Spaltennummer von 1 bis 7.");
         try{
             Scanner scanner = new Scanner(System.in);
             int move=Integer.parseInt(scanner.next());
@@ -86,7 +97,7 @@ public class Game {
                         System.out.print("x");
                         break;
                     }
-                    case 2: {
+                    case -1: {
                         System.out.print("o");
                         break;
                     }
@@ -111,6 +122,21 @@ public class Game {
             System.out.println("Hier ist leider schon alles Voll.");
         }
         return row;
+
+
     }
+
+    private void setDirections(){
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 6; j++) {
+                directions[i][j][0]=i<4;
+                directions[i][j][1]=(i<4&&j<3);
+                directions[i][j][2]=j<3;
+                directions[i][j][3]=(i>2&&j<3);
+            }
+        }
+    }
+
+
 
 }
