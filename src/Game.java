@@ -3,63 +3,71 @@ import java.util.Scanner;
 import java.util.Random;
 
 public class Game {
-    Minimax minimax;
-    private int[][]gameBord = new int[7][6];
+    private final int[][] values={
+            { 3,13,25,28,21,17},
+            { 8,25,35,40,31,26},
+            {15,34,40,45,37,30},
+            {27,39,46,50,39,36},
+            {15,34,40,45,37,30},
+            { 8,25,35,40,31,26},
+            { 3,13,25,28,21,17}
+
+    };
+    int[][]bord = new int[7][6];
     int player;
     int mode = getMode();
-
-
+    boolean[][][] directions=new boolean[7][6][4];
+    int bestEval=0;
+    int bestMove;
+    int bestEvalThisIteration;
+    int bestMoveThisIteration;
     public Game(){
-        Main.setDirections();
+        setDirections();
         player = setPlayer(0);//2 = kreis beginnt, 3 heißt zufälliger Spieler beginnt, default kreuz gebinnt
-        minimax = new Minimax();
+
 
     }
 
     public void startGame(){game(mode);}
 
-    private void game(int mode){
+    private void game(int mode) {
         boolean gameContinues = true;
-        while(gameContinues){
-            int[][] bord;
-            bord = getGameBord();
-            int row=10;
-            int move=10;
-            while (row==10){
-                move=getMove(player);
-                row = Main.getRow(bord,move); //todo: modi implementieren
+        while (gameContinues) {
+
+
+            int row = 10;
+            int move = 10;
+            while (row == 10) {
+                move = getMove(player);
+                row = getRow(move); //todo: modi implementieren
             }
-            bord[move][row]=player;
-            if (Main.is_won(bord)){
+            bord[move][row] = player;
+            if (is_won(bord)) {
                 displayBord(bord);
-                System.out.println("Spieler "+(player==-1?2:1)+" hat gewonnen!");
+                System.out.println("Spieler " + (player == -1 ? 2 : 1) + " hat gewonnen!");
 
                 break;
             }
-            if (mode==2&&player==1){
-                player=-1;
-                int aiMove = minimax.minimax(bord,5,false);
-                int aiRow=Main.getRow(bord,aiMove);
-                bord[aiMove][aiRow]=player;
-                if (Main.is_won(bord)){
+            if (mode == 2 && player == 1) {
+                switchPlayer();
+                int aiMove = bord[bestMove][getRow(bestMove)];
+                int aiRow = getRow(aiMove);
+                bord[aiMove][aiRow] = player;
+                if (is_won(bord)) {
                     displayBord(bord);
-                    System.out.println("Spieler "+(player==-1?2:1)+" hat gewonnen!");
+                    System.out.println("Spieler " + (player == -1 ? 2 : 1) + " hat gewonnen!");
 
                     break;
                 }
             }
 
 
-
             displayBord(bord);
 
-            player=(player==1?-1:1);
-            setGameBord(bord);
+            switchPlayer();
 
 
-
-
-            gameContinues=bordNotFinished(bord);
+            gameContinues = bordNotFinished(bord);
         }
     }
 
@@ -88,12 +96,6 @@ public class Game {
         }
         return player;
     }
-
-    private int[][] getGameBord() {
-        return gameBord;
-    }
-
-    private void setGameBord(int[][] gameBord) {this.gameBord=gameBord;}
 
     private boolean bordNotFinished(int[][] bord){
         for (int i = 0; i < 7; i++) {
@@ -140,5 +142,165 @@ public class Game {
             }
             System.out.println();
         }
+    }
+    public boolean is_won(int[][] gameBord){ //can be optimized through cutting out certain areas
+
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 6; j++) {
+                if(gameBord[i][j]!=0){
+                    if (directions[i][j][0]){
+                        if ((gameBord[i][j]==gameBord[i+1][j])&&(gameBord[i][j]==gameBord[i+2][j])&&(gameBord[i][j]==gameBord[i+3][j])){
+                            return true;
+                        }
+                    }
+
+                    if (directions[i][j][1]){
+                        if ((gameBord[i][j]==gameBord[i+1][j+1])&&(gameBord[i][j]==gameBord[i+2][j+2])&&(gameBord[i][j]==gameBord[i+3][j+3])){
+                            return true;
+                        }
+                    }
+
+                    if (directions[i][j][2]){
+                        if ((gameBord[i][j]==gameBord[i][j+1])&&(gameBord[i][j]==gameBord[i][j+2])&&(gameBord[i][j]==gameBord[i][j+3])){
+                            return true;
+                        }
+                    }
+
+                    if (directions[i][j][3]){
+                        if ((gameBord[i][j]==gameBord[i-1][j+1])&&(gameBord[i][j]==gameBord[i-2][j+2])&&(gameBord[i][j]==gameBord[i-3][j+3])){
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean[] getDirections(int i, int j){
+        return directions[i][j];
+    }
+
+    private void setDirections(){
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 6; j++) {
+                directions[i][j][0]=i<4;
+                directions[i][j][1]=(i<4&&j<3);
+                directions[i][j][2]=j<3;
+                directions[i][j][3]=(i>2&&j<3);
+            }
+        }
+    }
+
+    public int getRow(int move){
+        if (move==10)return 10;
+        int row=10;
+        for (int i = 0; i < 6; i++) {
+            if (bord[move][i]==0){
+                row=i;
+                break;
+            }
+        }
+        if (row==10){
+            System.out.println("Hier ist leider schon alles Voll.");
+        }
+        return row;
+
+
+    }
+
+
+
+
+
+    public int evaluate(int mode,int[][] gameBord){
+        boolean max=(player==1);
+        int evaluation;
+        if(is_won(gameBord))return 1000*(max?-1:1);
+
+        evaluation=evalField(gameBord)+evalPosition(gameBord);
+
+        return evaluation;
+    }
+    private int evalField(int[][] bord){
+        int value=0;
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 6; j++) {
+                if(bord[i][j]==0)break;
+                value=value+(values[i][j]*bord[i][j]);
+
+            }
+        }
+
+        return value;
+    }
+    private int evalPosition(int[][] bord){
+        int eval_position=0;
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 6; j++) {
+                if (bord[i][j]==0)break;
+                boolean[] directions=getDirections(i,j);
+                if(directions[0]){
+                    int tempEval=bord[i][j];
+                    for (int k = 1; k < 4; k++) {
+                        if(bord[i][j]==bord[i+k][j]){
+                            tempEval=tempEval*4;
+                        }
+                        eval_position=eval_position+tempEval;
+                    }
+                }
+                if(directions[1]){
+                    int tempEval=bord[i][j];
+                    for (int k = 1; k < 4; k++) {
+                        if(bord[i][j]==bord[i+k][j+k]){
+                            tempEval=tempEval*4;
+                        }
+                        eval_position=eval_position+tempEval;
+                    }
+                }
+                if(directions[2]){
+                    int tempEval=bord[i][j];
+                    for (int k = 1; k < 4; k++) {
+                        if(bord[i][j]==bord[i][j+k]){
+                            tempEval=tempEval*4;
+                        }
+                        eval_position=eval_position+tempEval;
+                    }
+                }
+                if(directions[3]){
+                    int tempEval=bord[i][j];
+                    for (int k = 1; k < 4; k++) {
+                        if(bord[i][j]==bord[i-k][j+k]){
+                            tempEval=tempEval*4;
+                        }
+                        eval_position=eval_position+tempEval;
+                    }
+                }
+            }
+        }
+        return eval_position;
+    }
+
+    private int search(int[][] gameBord,int depth,int alpha,int beta){
+        if (depth==0)return evaluate(0,gameBord);
+
+        for (int i = 0; i < 7; i++) {
+            if (gameBord[i][5]!=0)break;
+            switchPlayer();
+            gameBord[i][getRow(i)]=player;
+            int evaluation= search(gameBord,depth-1,-alpha,-beta);
+            if (evaluation<=beta)return beta;
+            if(evaluation>alpha)alpha=evaluation;
+        }
+        return alpha;
+    }
+
+    public void switchPlayer(){
+        player= player == 1 ? -1 : 1;
+    }
+
+    public void startSearch(int depth){
+        bestEvalThisIteration=bestEval=bestMoveThisIteration=bestMove=0;
+        
     }
 }
