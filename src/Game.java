@@ -28,7 +28,7 @@ public class Game {
             int move=10;
             while (row==10){
                 move=getMove(player);
-                row = getRow(bord,move);
+                row = getRow(bord,move); //todo: modi implementieren
             }
             bord[move][row]=player;
             if (Main.is_won(bord)){
@@ -91,10 +91,11 @@ public class Game {
     private void setGameBord(int[][] gameBord) {this.gameBord=gameBord;}
 
     private boolean bordNotFinished(int[][] bord){
+        for (int i = 0; i < 7; i++) {
+            if (bord[i][5]==0)return true;
+        }
 
-
-
-        return true;
+        return false;
     }
 
     private int getMove(int player){
