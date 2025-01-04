@@ -19,7 +19,7 @@ public class Evaluation {
 
     public int evaluate(int[][] bord,int mode, boolean max){
         int evaluation=0;
-        if(Main.is_won(bord))return 1000*(max?1:-1);
+        if(Main.is_won(bord))return 1000*(max?-1:1);
 
         evaluation=evalField(bord)+evalPosition(bord);
 
@@ -28,7 +28,7 @@ public class Evaluation {
     private int evalField(int[][] bord){
         int value=0;
         for (int i = 0; i < 7; i++) {
-            for (int j = 0; j <= 6; j++) {
+            for (int j = 0; j < 6; j++) {
                 if(bord[i][j]==0)break;
                 value=value+(values[i][j]*bord[i][j]);
 
@@ -40,12 +40,12 @@ public class Evaluation {
     private int evalPosition(int[][] bord){
         int eval_position=0;
         for (int i = 0; i < 7; i++) {
-            for (int j = 0; j <=5; j++) {
+            for (int j = 0; j < 6; j++) {
                 if (bord[i][j]==0)break;
                 boolean[] directions=Main.getDirections(i,j);
                 if(directions[0]){
                     int tempEval=bord[i][j];
-                    for (int k = 1; k < 3; k++) {
+                    for (int k = 1; k < 4; k++) {
                         if(bord[i][j]==bord[i+k][j]){
                             tempEval=tempEval*4;
                         };
@@ -54,7 +54,7 @@ public class Evaluation {
                 }
                 if(directions[1]){
                     int tempEval=bord[i][j];
-                    for (int k = 1; k < 3; k++) {
+                    for (int k = 1; k < 4; k++) {
                         if(bord[i][j]==bord[i+k][j+k]){
                             tempEval=tempEval*4;
                         };
@@ -63,7 +63,7 @@ public class Evaluation {
                 }
                 if(directions[2]){
                     int tempEval=bord[i][j];
-                    for (int k = 1; k < 3; k++) {
+                    for (int k = 1; k < 4; k++) {
                         if(bord[i][j]==bord[i][j+k]){
                             tempEval=tempEval*4;
                         };
@@ -72,7 +72,7 @@ public class Evaluation {
                 }
                 if(directions[3]){
                     int tempEval=bord[i][j];
-                    for (int k = 1; k < 3; k++) {
+                    for (int k = 1; k < 4; k++) {
                         if(bord[i][j]==bord[i-k][j+k]){
                             tempEval=tempEval*4;
                         };
@@ -83,7 +83,4 @@ public class Evaluation {
         }
         return eval_position;
     }
-
-
-
 }
