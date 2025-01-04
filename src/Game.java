@@ -6,14 +6,11 @@ public class Game {
 
     private int[][]gameBord = new int[7][6];
     int player;
-    int mode;
+    int mode = getMode();
     Evaluation evaluation;
     static boolean[][][] directions=new boolean[7][6][4];
     public Game(){
-        setDirections();
-        mode=getMode();
-        Scanner scanner= new Scanner(System.in);
-        scanner.next();
+        Main.setDirections();
         player = setPlayer(0);//2 = kreis beginnt, 3 heißt zufälliger Spieler beginnt, default kreuz gebinnt
         evaluation = new Evaluation();
         game(mode);
@@ -28,7 +25,7 @@ public class Game {
             int move=10;
             while (row==10){
                 move=getMove(player);
-                row = getRow(bord,move); //todo: modi implementieren
+                row = Main.getRow(bord,move); //todo: modi implementieren
             }
             bord[move][row]=player;
             if (Main.is_won(bord)){
@@ -36,6 +33,15 @@ public class Game {
                 System.out.println("Spieler "+(player==-1?2:1)+" hat gewonnen!");
                 break;
             }
+            if (mode==2&&player==1){
+                player=-1;
+                int aiMove =minimax(bord,3,false);
+                int aiRow=Main.getRow(bord,aiMove);
+                bord[aiMove][aiRow]=player;
+
+            }
+
+
 
             displayBord(bord);
 
@@ -52,18 +58,10 @@ public class Game {
     private int getMode(){
         int mode =0;
         System.out.println("In welchem Modus möchtest du spielen?");
-
-        while(mode<1){
-
-            try{
-                Scanner scnanner = new Scanner(System.in);
-                int m=Integer.parseInt(scnanner.next());
-                mode=m;
-            }catch (Exception e){
-                System.out.println("Mensch -> 1 | Computer ->2");
-            }
-            if (mode>2)mode=0;
-        }
+        System.out.println("Mensch -> 1 | Computer ->2");
+        Scanner scnanner = new Scanner(System.in);
+        int m=Integer.parseInt(scnanner.next());
+        mode=m;
         return mode;
     }
 
@@ -136,33 +134,9 @@ public class Game {
         }
     }
 
-    private int getRow(int[][] bord,int move){
-        if (move==10)return 10;
-        int row=10;
-        for (int i = 0; i < 6; i++) {
-            if (bord[move][i]==0){
-                row=i;
-                break;
-            }
-        }
-        if (row==10){
-            System.out.println("Hier ist leider schon alles Voll.");
-        }
-        return row;
 
 
-    }
 
-    private void setDirections(){
-        for (int i = 0; i < 7; i++) {
-            for (int j = 0; j < 6; j++) {
-                directions[i][j][0]=i<4;
-                directions[i][j][1]=(i<4&&j<3);
-                directions[i][j][2]=j<3;
-                directions[i][j][3]=(i>2&&j<3);
-            }
-        }
-    }
 
     public int minimax(int[][] bord,int depth,boolean max){
         int move=-1;
@@ -174,11 +148,11 @@ public class Game {
         if(max){
             for (int i = 0; i < 7; i++) {
                 if (bord[i][5]==0){
-                    int row= getRow(bord,i);
+                    int row= Main.getRow(bord,i);
                     bord[i][row]=1;
                     score= minimaxrec(bord,depth-1,false);
                     bord[i][row]=0;
-                    if(score<bestScore){
+                    if(score>bestScore){
                         bestScore=score;
                         bestMove=i;
                     }
@@ -188,11 +162,11 @@ public class Game {
         }else {
             for (int i = 0; i < 7; i++) {
                 if (bord[i][5]==0){
-                    int row= getRow(bord,i);
+                    int row= Main.getRow(bord,i);
                     bord[i][row]=-1;
                     score= minimaxrec(bord,depth-1,true);
                     bord[i][row]=0;
-                    if(score>bestScore){
+                    if(score<bestScore){
                         bestScore=score;
                         bestMove=i;
                     }
@@ -214,11 +188,12 @@ public class Game {
         if(max){
             for (int i = 0; i < 7; i++) {
                 if (bord[i][5]==0){
-                    int row= getRow(bord,i);
+                    int row= Main.getRow(bord,i);
                     bord[i][row]=1;
                     score= minimaxrec(bord,depth-1,false);
                     bord[i][row]=0;
-                    if(score<bestScore){
+                    System.out.print(score+" ");
+                    if(score>bestScore){
                         bestScore=score;
                     }
                 }
@@ -227,17 +202,18 @@ public class Game {
         }else {
             for (int i = 0; i < 7; i++) {
                 if (bord[i][5]==0){
-                    int row= getRow(bord,i);
+                    int row= Main.getRow(bord,i);
                     bord[i][row]=-1;
                     score= minimaxrec(bord,depth-1,true);
                     bord[i][row]=0;
-                    if(score>bestScore){
+                    System.out.print(score+" ");
+                    if(score<bestScore){
                         bestScore=score;
                     }
                 }
             }
         }
-
+        System.out.println();
 
 
         return bestScore;

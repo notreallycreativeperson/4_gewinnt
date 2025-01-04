@@ -21,19 +21,67 @@ public class Evaluation {
         int evaluation=0;
         if(Main.is_won(bord))return 1000*(max?1:-1);
 
-        evaluation=eval_positions(bord);
+        evaluation=evalField(bord)+evalPosition(bord);
 
         return evaluation;
     }
-    private int eval_positions(int[][] bord){
+    private int evalField(int[][] bord){
         int value=0;
         for (int i = 0; i < 7; i++) {
-            for (int j = 0; j < 6; j++) {
+            for (int j = 0; j <= 6; j++) {
+                if(bord[i][j]==0)break;
                 value=value+(values[i][j]*bord[i][j]);
+
             }
         }
 
         return value;
+    }
+    private int evalPosition(int[][] bord){
+        int eval_position=0;
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j <=5; j++) {
+                if (bord[i][j]==0)break;
+                boolean[] directions=Main.getDirections(i,j);
+                if(directions[0]){
+                    int tempEval=bord[i][j];
+                    for (int k = 1; k < 3; k++) {
+                        if(bord[i][j]==bord[i+k][j]){
+                            tempEval=tempEval*4;
+                        };
+                        eval_position=eval_position+tempEval;
+                    }
+                }
+                if(directions[1]){
+                    int tempEval=bord[i][j];
+                    for (int k = 1; k < 3; k++) {
+                        if(bord[i][j]==bord[i+k][j+k]){
+                            tempEval=tempEval*4;
+                        };
+                        eval_position=eval_position+tempEval;
+                    }
+                }
+                if(directions[2]){
+                    int tempEval=bord[i][j];
+                    for (int k = 1; k < 3; k++) {
+                        if(bord[i][j]==bord[i][j+k]){
+                            tempEval=tempEval*4;
+                        };
+                        eval_position=eval_position+tempEval;
+                    }
+                }
+                if(directions[3]){
+                    int tempEval=bord[i][j];
+                    for (int k = 1; k < 3; k++) {
+                        if(bord[i][j]==bord[i-k][j+k]){
+                            tempEval=tempEval*4;
+                        };
+                        eval_position=eval_position+tempEval;
+                    }
+                }
+            }
+        }
+        return eval_position;
     }
 
 
