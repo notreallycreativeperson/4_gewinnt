@@ -13,44 +13,28 @@ public class Main {
             for (int j = 0; j < 6; j++) {
                 if(bord[i][j]!=0){
                     if (directions[i][j][0]){
-                        for (int k = 1; k < 4; k++) {
-                            if (bord[i][j]!=bord[i+k][j]) {
-                                break;
-                            }
+                        if ((bord[i][j]==bord[i+1][j])&&(bord[i][j]==bord[i+2][j])&&(bord[i][j]==bord[i+3][j])){
+                            return true;
                         }
-
-                        return true;
                     }
                     if (directions[i][j][1]){
-                        for (int k = 1; k < 4; k++) {
-                            if (bord[i][j]!=bord[i+k][j+k]){
-                                break;
-                            }
+                        if ((bord[i][j]==bord[i+1][j+1])&&(bord[i][j]==bord[i+2][j+2])&&(bord[i][j]==bord[i+3][j+3])){
+                            return true;
                         }
-
-                        return true;
                     }
                     if (directions[i][j][2]){
-                        for (int k = 1; k < 4; k++) {
-                            if (bord[i][j]!=bord[i][j+k]) {
-                                break;
-                            }
-                        }
+                        if ((bord[i][j]==bord[i][j+1])&&(bord[i][j]==bord[i][j+2])&&(bord[i][j]==bord[i][j+3])){
                             return true;
+                        }
                     }
                     if (directions[i][j][3]){
-                        for (int k = 1; k < 4; k++) {
-                            if (bord[i][j]!=bord[i-k][j+k]){
-                                break;
-                            }
-
+                        if ((bord[i][j]==bord[i-1][j+1])&&(bord[i][j]==bord[i-2][j+2])&&(bord[i][j]==bord[i-3][j+3])){
+                            return true;
                         }
-                        return true;
                     }
-
                 }
-            }
 
+            }
         }
         return false;
     }
