@@ -18,7 +18,7 @@ public class Evaluation {
     }
 
     public int evaluate(int[][] bord,int mode, boolean max){
-        int evaluation=0;
+        int evaluation;
         if(Main.is_won(bord))return 1000*(max?-1:1);
 
         evaluation=evalField(bord)+evalPosition(bord);
@@ -48,7 +48,7 @@ public class Evaluation {
                     for (int k = 1; k < 4; k++) {
                         if(bord[i][j]==bord[i+k][j]){
                             tempEval=tempEval*4;
-                        };
+                        }
                         eval_position=eval_position+tempEval;
                     }
                 }
@@ -57,7 +57,7 @@ public class Evaluation {
                     for (int k = 1; k < 4; k++) {
                         if(bord[i][j]==bord[i+k][j+k]){
                             tempEval=tempEval*4;
-                        };
+                        }
                         eval_position=eval_position+tempEval;
                     }
                 }
@@ -66,7 +66,7 @@ public class Evaluation {
                     for (int k = 1; k < 4; k++) {
                         if(bord[i][j]==bord[i][j+k]){
                             tempEval=tempEval*4;
-                        };
+                        }
                         eval_position=eval_position+tempEval;
                     }
                 }
@@ -75,7 +75,7 @@ public class Evaluation {
                     for (int k = 1; k < 4; k++) {
                         if(bord[i][j]==bord[i-k][j+k]){
                             tempEval=tempEval*4;
-                        };
+                        }
                         eval_position=eval_position+tempEval;
                     }
                 }

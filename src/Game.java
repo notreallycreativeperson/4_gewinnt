@@ -13,8 +13,10 @@ public class Game {
         Main.setDirections();
         player = setPlayer(0);//2 = kreis beginnt, 3 heißt zufälliger Spieler beginnt, default kreuz gebinnt
         minimax = new Minimax();
-        game(mode);
+
     }
+
+    public void startGame(){game(mode);}
 
     private void game(int mode){
         boolean gameContinues = true;
@@ -62,12 +64,11 @@ public class Game {
     }
 
     private int getMode(){
-        int mode =0;
+        int mode;
         System.out.println("In welchem Modus möchtest du spielen?");
         System.out.println("Mensch -> 1 | Computer ->2");
         Scanner scnanner = new Scanner(System.in);
-        int m=Integer.parseInt(scnanner.next());
-        mode=m;
+        mode= Integer.parseInt(scnanner.next());
         return mode;
     }
 
@@ -118,6 +119,7 @@ public class Game {
             return 10;
         }
     }
+
 
     private void displayBord(int[][] bord){
         for (int i = 5; i >= 0; i--) {

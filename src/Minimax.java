@@ -5,11 +5,10 @@ public class Minimax {
     }
 
     public int minimax(int[][] bord,int depth,boolean max){
-        int move=-1;
         int n = (max?1:-1);
         int bestScore =-10000*n;
         int bestMove=-1;
-        int score =bestScore;
+        int score;
 
         if(max){
             for (int i = 0; i < 7; i++) {
@@ -49,7 +48,7 @@ public class Minimax {
         }
         int n = (max?1:-1);
         int bestScore =-10000*n;
-        int score =bestScore;
+        int score;
 
         if(max){
             for (int i = 0; i < 7; i++) {
