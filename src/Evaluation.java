@@ -2,7 +2,7 @@ public class Evaluation {
 
 
 
-    private int[][] values={
+    private final int[][] values={
             { 3,13,25,28,21,17},
             { 8,25,35,40,31,26},
             {15,34,40,45,37,30},
@@ -18,12 +18,12 @@ public class Evaluation {
     }
 
     public int evaluate(int[][] bord,int mode, int player){
-        int evaluation;
+        int evaluation=0;
         if(Main.is_won(bord))return 1000*player;
 
+        evaluation=eval_positions(bord);
 
-
-        return 0;
+        return evaluation;
     }
     private int eval_positions(int[][] bord){
         int value=0;

@@ -6,10 +6,12 @@ public class Game {
 
     private int[][]gameBord = new int[7][6];
     int player;
+    Evaluation evaluation;
     static boolean[][][] directions=new boolean[7][6][4];
     public Game(){
         setDirections();
         player = setPlayer(0);//2 = kreis beginnt, 3 heißt zufälliger Spieler beginnt, default kreuz gebinnt
+        evaluation = new Evaluation();
         game();
     }
 
@@ -30,8 +32,10 @@ public class Game {
                 System.out.println("Spieler "+(player==-1?2:1)+" hat gewonnen!");
                 break;
             }
-            player=(player==1?-1:1);
+
             displayBord(bord);
+            System.out.println(evaluation.evaluate(bord,1,player));
+            player=(player==1?-1:1);
             setGameBord(bord);
 
 
