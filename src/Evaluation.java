@@ -17,9 +17,9 @@ public class Evaluation {
 
     }
 
-    public int evaluate(int[][] bord,int mode, int player){
+    public int evaluate(int[][] bord,int mode, boolean max){
         int evaluation=0;
-        if(Main.is_won(bord))return 1000*player;
+        if(Main.is_won(bord))return 1000*(max?1:-1);
 
         evaluation=eval_positions(bord);
 

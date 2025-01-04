@@ -6,16 +6,20 @@ public class Game {
 
     private int[][]gameBord = new int[7][6];
     int player;
+    int mode;
     Evaluation evaluation;
     static boolean[][][] directions=new boolean[7][6][4];
     public Game(){
         setDirections();
+        mode=getMode();
+        Scanner scanner= new Scanner(System.in);
+        scanner.next();
         player = setPlayer(0);//2 = kreis beginnt, 3 heißt zufälliger Spieler beginnt, default kreuz gebinnt
         evaluation = new Evaluation();
-        game();
+        game(mode);
     }
 
-    private void game(){
+    private void game(int mode){
         boolean gameContinues = true;
         while(gameContinues){
             int[][] bord;
@@ -34,7 +38,7 @@ public class Game {
             }
 
             displayBord(bord);
-            System.out.println(evaluation.evaluate(bord,1,player));
+
             player=(player==1?-1:1);
             setGameBord(bord);
 
@@ -43,6 +47,24 @@ public class Game {
 
             gameContinues=bordNotFinished(bord);
         }
+    }
+
+    private int getMode(){
+        int mode =0;
+        System.out.println("In welchem Modus möchtest du spielen?");
+
+        while(mode<1){
+
+            try{
+                Scanner scnanner = new Scanner(System.in);
+                int m=Integer.parseInt(scnanner.next());
+                mode=m;
+            }catch (Exception e){
+                System.out.println("Mensch -> 1 | Computer ->2");
+            }
+            if (mode>2)mode=0;
+        }
+        return mode;
     }
 
     private int setPlayer(int mode){
@@ -140,6 +162,87 @@ public class Game {
             }
         }
     }
+
+    public int minimax(int[][] bord,int depth,boolean max){
+        int move=-1;
+        int n = (max?1:-1);
+        int bestScore =-10000*n;
+        int bestMove=-1;
+        int score =bestScore;
+
+        if(max){
+            for (int i = 0; i < 7; i++) {
+                if (bord[i][5]==0){
+                    int row= getRow(bord,i);
+                    bord[i][row]=1;
+                    score= minimaxrec(bord,depth-1,false);
+                    bord[i][row]=0;
+                    if(score<bestScore){
+                        bestScore=score;
+                        bestMove=i;
+                    }
+                }
+            }
+
+        }else {
+            for (int i = 0; i < 7; i++) {
+                if (bord[i][5]==0){
+                    int row= getRow(bord,i);
+                    bord[i][row]=-1;
+                    score= minimaxrec(bord,depth-1,true);
+                    bord[i][row]=0;
+                    if(score>bestScore){
+                        bestScore=score;
+                        bestMove=i;
+                    }
+                }
+            }
+        }
+
+        return bestMove;
+    }
+
+    private int minimaxrec(int[][]bord,int depth, boolean max){
+        if (depth==0||Main.is_won(bord)) {
+            return evaluation.evaluate(bord,1,max);
+        }
+        int n = (max?1:-1);
+        int bestScore =-10000*n;
+        int score =bestScore;
+
+        if(max){
+            for (int i = 0; i < 7; i++) {
+                if (bord[i][5]==0){
+                    int row= getRow(bord,i);
+                    bord[i][row]=1;
+                    score= minimaxrec(bord,depth-1,false);
+                    bord[i][row]=0;
+                    if(score<bestScore){
+                        bestScore=score;
+                    }
+                }
+            }
+
+        }else {
+            for (int i = 0; i < 7; i++) {
+                if (bord[i][5]==0){
+                    int row= getRow(bord,i);
+                    bord[i][row]=-1;
+                    score= minimaxrec(bord,depth-1,true);
+                    bord[i][row]=0;
+                    if(score>bestScore){
+                        bestScore=score;
+                    }
+                }
+            }
+        }
+
+
+
+        return bestScore;
+    }
+
+
 
 
 

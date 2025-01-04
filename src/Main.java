@@ -3,6 +3,7 @@
 public class Main {
     public static void main(String args[]){
         Game game= new Game();
+        Evaluation evaluation= new Evaluation();
     }
     public static boolean is_won(int[][] bord){
 
@@ -36,5 +37,6 @@ public class Main {
 
         return false;
     }
+
 }
 
