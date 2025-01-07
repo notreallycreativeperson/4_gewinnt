@@ -25,6 +25,7 @@ public class Evaluation {
 
         return evaluation;
     }
+
     private int evalField(int[][] bord){
         int value=0;
         for (int i = 0; i < 7; i++) {
@@ -37,6 +38,7 @@ public class Evaluation {
 
         return value;
     }
+
     private int evalPosition(int[][] bord){
         int eval_position=0;
         for (int i = 0; i < 7; i++) {
