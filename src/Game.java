@@ -36,9 +36,9 @@ public class Game {
 
                 break;
             }
-            if (mode==2&&player==1){
-                player=-1;
-                int aiMove = minimax.minimax(bord,5,false);
+            if (mode==2){
+                player=(player==1?-1:1);
+                int aiMove = minimax.minimax(bord,4,player==1,-100,100);
                 int aiRow=Main.getRow(bord,aiMove);
                 bord[aiMove][aiRow]=player;
                 if (Main.is_won(bord)){
@@ -124,7 +124,7 @@ public class Game {
     private void displayBord(int[][] bord){
         for (int i = 5; i >= 0; i--) {
             for (int j = 0; j < 7; j++) {
-                System.out.print("(");
+                System.out.print("[");
                 switch (bord[j][i]){
                     case 1: {
                         System.out.print("x");
@@ -136,7 +136,7 @@ public class Game {
                     }
                     default: System.out.print(" ");
                 }
-                System.out.print(") ");
+                System.out.print("] ");
             }
             System.out.println();
         }

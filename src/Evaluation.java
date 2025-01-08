@@ -48,36 +48,37 @@ public class Evaluation {
                 if(directions[0]){
                     int tempEval=bord[i][j];
                     for (int k = 1; k < 4; k++) {
-                        if(bord[i][j]==bord[i+k][j]){
+                        if(bord[i+(k-1)][j]==bord[i+k][j]){
+
                             tempEval=tempEval*4;
-                        }
+                        }else break;
                         eval_position=eval_position+tempEval;
                     }
                 }
                 if(directions[1]){
                     int tempEval=bord[i][j];
                     for (int k = 1; k < 4; k++) {
-                        if(bord[i][j]==bord[i+k][j+k]){
+                        if(bord[i+(k-1)][j+(k-1)]==bord[i+k][j+k]){
                             tempEval=tempEval*4;
-                        }
+                        }else break;
                         eval_position=eval_position+tempEval;
                     }
                 }
                 if(directions[2]){
                     int tempEval=bord[i][j];
                     for (int k = 1; k < 4; k++) {
-                        if(bord[i][j]==bord[i][j+k]){
+                        if(bord[i][j+(k-1)]==bord[i][j+k]){
                             tempEval=tempEval*4;
-                        }
+                        }else break;
                         eval_position=eval_position+tempEval;
                     }
                 }
                 if(directions[3]){
                     int tempEval=bord[i][j];
                     for (int k = 1; k < 4; k++) {
-                        if(bord[i][j]==bord[i-k][j+k]){
+                        if(bord[i-(k-1)][j+(k-1)]==bord[i-k][j+k]){
                             tempEval=tempEval*4;
-                        }
+                        }else break;
                         eval_position=eval_position+tempEval;
                     }
                 }
