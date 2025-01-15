@@ -17,7 +17,7 @@ public class Evaluation {
 
     }
 
-    public int evaluate(int[][] bord,int mode, boolean max){
+    public int evaluate(int[][] bord,boolean max){
         int evaluation;
         if(Main.is_won(bord))return 1000*(max?-1:1);
 
@@ -50,36 +50,36 @@ public class Evaluation {
                     for (int k = 1; k < 4; k++) {
                         if(bord[i+(k-1)][j]==bord[i+k][j]){
 
-                            tempEval=tempEval*4;
+                            tempEval*=4;
                         }else break;
-                        eval_position=eval_position+tempEval;
+                        eval_position+=tempEval;
                     }
                 }
                 if(directions[1]){
                     int tempEval=bord[i][j];
                     for (int k = 1; k < 4; k++) {
                         if(bord[i+(k-1)][j+(k-1)]==bord[i+k][j+k]){
-                            tempEval=tempEval*4;
+                            tempEval *= 4;
                         }else break;
-                        eval_position=eval_position+tempEval;
+                        eval_position+=tempEval;
                     }
                 }
                 if(directions[2]){
                     int tempEval=bord[i][j];
                     for (int k = 1; k < 4; k++) {
                         if(bord[i][j+(k-1)]==bord[i][j+k]){
-                            tempEval=tempEval*4;
+                            tempEval*=4;
                         }else break;
-                        eval_position=eval_position+tempEval;
+                        eval_position += tempEval;
                     }
                 }
                 if(directions[3]){
                     int tempEval=bord[i][j];
                     for (int k = 1; k < 4; k++) {
                         if(bord[i-(k-1)][j+(k-1)]==bord[i-k][j+k]){
-                            tempEval=tempEval*4;
+                            tempEval*=4;
                         }else break;
-                        eval_position=eval_position+tempEval;
+                        eval_position += tempEval;
                     }
                 }
             }

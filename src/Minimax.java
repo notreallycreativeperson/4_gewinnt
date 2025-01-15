@@ -4,10 +4,10 @@ public class Minimax {
         evaluation = new Evaluation();
     }
 
-    public int minimax(int[][] bord,int depth,boolean max,int alpha,int beta){
+    public int minimax(int[][] bord,int depth,boolean max){
         int bestScore;
         int bestMove=-1;
-        int score;
+
 
         if(max){
             bestScore =-1000000;
@@ -15,14 +15,14 @@ public class Minimax {
                 if (bord[i][5]==0){
                     int row= Main.getRow(bord,i);
                     bord[i][row]=1;
-                    int score= miniMaxRec(bord,depth-1,false,alpha,beta);
+                    int score= miniMaxRec(bord,depth-1,false);
                     bord[i][row]=0;
                     if(score>bestScore){
                         bestScore=score;
                         bestMove=i;
                     }
                 }
-            }return bestMove;
+            }
 
         }else {
             bestScore =1000000;
@@ -30,7 +30,7 @@ public class Minimax {
                 if (bord[i][5]==0){
                     int row= Main.getRow(bord,i);
                     bord[i][row]=-1;
-                    int score= miniMaxRec(bord,depth-1,true,alpha,beta);
+                    int score= miniMaxRec(bord,depth-1,true);
                     bord[i][row]=0;
                     if(score<bestScore){
                         bestScore=score;
@@ -38,15 +38,15 @@ public class Minimax {
                     }
                 }
             }
-            return bestMove;
         }
+        return bestMove;
 
 
     }
 
-    private int miniMaxRec(int[][]bord,int depth, boolean max,int alpha,int beta){
+    private int miniMaxRec(int[][]bord,int depth, boolean max){
         if (depth==0||Main.is_won(bord)) {
-            return evaluation.evaluate(bord,1,max);
+            return evaluation.evaluate(bord,max);
         }
         int bestScore;
 
@@ -57,14 +57,13 @@ public class Minimax {
                 if (bord[i][5]==0){
                     int row= Main.getRow(bord,i);
                     bord[i][row]=1;
-                    int score= miniMaxRec(bord,depth-1,false,alpha,beta);
+                    int score= miniMaxRec(bord,depth-1,false);
                     bord[i][row]=0;
                     if(score>bestScore) {
                         bestScore = score;
                     }
                 }
             }
-            return bestScore;
 
         }else {
             bestScore =1000000;
@@ -72,16 +71,15 @@ public class Minimax {
                 if (bord[i][5]==0){
                     int row= Main.getRow(bord,i);
                     bord[i][row]=-1;
-                    int score= miniMaxRec(bord,depth-1,true,alpha,beta);
+                    int score= miniMaxRec(bord,depth-1,true);
                     bord[i][row]=0;
                     if(score<bestScore){
                         bestScore=score;
                     }
                 }
             }
-            return bestScore;
         }
-
+        return bestScore;
 
 
     }

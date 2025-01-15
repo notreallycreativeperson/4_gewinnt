@@ -1,25 +1,27 @@
 
 import java.util.Scanner;
-import java.util.Random;
+
+import static java.lang.System.out;
 
 public class Game {
     Minimax minimax;
     private int[][]gameBord = new int[7][6];
     int player;
-    int mode = getMode();
+    //int mode = getMode();
 
 
     public Game(){
         Main.setDirections();
-        player = setPlayer(0);//2 = kreis beginnt, 3 heißt zufälliger Spieler beginnt, default kreuz gebinnt
+        player = setPlayer();//2 = kreis beginnt, 3 heißt zufälliger Spieler beginnt, default kreuz gebinnt
         minimax = new Minimax();
 
     }
 
-    public void startGame(){game(mode);}
+    public void startGame(){game(2);}
 
     private void game(int mode){
         boolean gameContinues = true;
+        displayBord(new int[7][6]);
         while(gameContinues){
             int[][] bord;
             bord = getGameBord();
@@ -32,18 +34,18 @@ public class Game {
             bord[move][row]=player;
             if (Main.is_won(bord)){
                 displayBord(bord);
-                System.out.println("Spieler "+(player==-1?2:1)+" hat gewonnen!");
+                out.println("Spieler "+(player==-1?2:1)+" hat gewonnen!");
 
                 break;
             }
             if (mode==2){
                 player=(player==1?-1:1);
-                int aiMove = minimax.minimax(bord,4,player==1,-100,100);
+                int aiMove = minimax.minimax(bord,6,player==1);
                 int aiRow=Main.getRow(bord,aiMove);
                 bord[aiMove][aiRow]=player;
                 if (Main.is_won(bord)){
                     displayBord(bord);
-                    System.out.println("Spieler "+(player==-1?2:1)+" hat gewonnen!");
+                    out.println("Spieler "+(player==-1?2:1)+" hat gewonnen!");
 
                     break;
                 }
@@ -64,29 +66,15 @@ public class Game {
     }
 
     private int getMode(){
-        int mode;
-        System.out.println("In welchem Modus möchtest du spielen?");
-        System.out.println("Mensch -> 1 | Computer ->2");
+
+        out.println("In welchem Modus möchtest du spielen?");
+        out.println("Mensch -> 1 | Computer ->2");
         Scanner scnanner = new Scanner(System.in);
-        mode= Integer.parseInt(scnanner.next());
-        return mode;
+        return  Integer.parseInt(scnanner.next())  ;
     }
 
-    private int setPlayer(int mode){
-        int player;
-        switch (mode){
-            case 2:
-                player=-1;
-            case 3:{
-                Random rand= new Random();
-                if (rand.nextInt(2)==0) player = 1;
-                else player = -1;
-            }
-            default:{
-                player =1;
-            }
-        }
-        return player;
+    private int setPlayer(){
+        return 1;
     }
 
     private int[][] getGameBord() {
@@ -104,41 +92,46 @@ public class Game {
     }
 
     private int getMove(int player){
-        System.out.println("Spieler "+(player==-1?2:player)+" ist am Zug.  " +"Bitte gib eine Spaltennummer von 1 bis 7.");
+        out.println("Spieler "+(player==-1?2:player)+" ist am Zug. ");
+        out.println("Bitte gib eine Spaltennummer von 1 bis 7.");
         try{
             Scanner scanner = new Scanner(System.in);
             int move=Integer.parseInt(scanner.next());
             if(move>7||move<1){
-                System.out.println("Bitte gib eine Zulässige Zahl ein.");
+                out.println("Bitte gib eine Zulässige Zahl ein.");
                 return 10;
             }else{
                 return move-1;
             }
         }catch (Exception e){
-            System.out.println("Bitte gib eine Zulässige Zahl ein.");
+            out.println("Bitte gib eine Zulässige Zahl ein.");
             return 10;
         }
     }
 
 
     private void displayBord(int[][] bord){
+        for (int i = 1; i < 8; i++) {
+            out.print(" "+i+"  ");
+        }
+        out.println();
         for (int i = 5; i >= 0; i--) {
             for (int j = 0; j < 7; j++) {
-                System.out.print("[");
+                out.print("[");
                 switch (bord[j][i]){
                     case 1: {
-                        System.out.print("x");
+                        out.print("x");
                         break;
                     }
                     case -1: {
-                        System.out.print("o");
+                        out.print("o");
                         break;
                     }
-                    default: System.out.print(" ");
+                    default: out.print(" ");
                 }
-                System.out.print("] ");
+                out.print("] ");
             }
-            System.out.println();
+            out.println();
         }
     }
 }
