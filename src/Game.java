@@ -42,7 +42,7 @@ public class Game {
             }
             if (mode == 2) {
                 player = (player == 1 ? -1 : 1);
-                int aiMove = minimax.minimax(bord, 6, player == 1);
+                int aiMove = minimax.miniMax(bord, 6,-100000,100000, player == 1,false);
                 int aiRow = Main.getRow(bord, aiMove);
                 bord[aiMove][aiRow] = player;
                 if (Main.is_won(bord)) {

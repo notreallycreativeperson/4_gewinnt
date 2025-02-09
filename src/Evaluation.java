@@ -18,7 +18,7 @@ public class Evaluation {
 
     public int evaluate(int[][] bord, boolean max) {
         int evaluation;
-        if (Main.is_won(bord)) return 1000 * (max ? -1 : 1);
+        if (Main.is_won(bord)) return 1000000 * (max ? -1 : 1);
 
         evaluation = evalField(bord) + evalPosition(bord);
 

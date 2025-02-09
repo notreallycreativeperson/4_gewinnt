@@ -5,22 +5,32 @@ public class Minimax {
         evaluation = new Evaluation();
     }
 
-    public int minimax(int[][] bord, int depth, boolean max) {
+    public int miniMax(int[][] bord, int depth, int alpha, int beta,boolean max, boolean isScore) {
+        if(depth==0||Main.is_won(bord)){
+            return evaluation.evaluate(bord,max);
+        }
+
+
         int bestScore;
         int bestMove = -1;
 
 
+
         if (max) {
             bestScore = -1000000;
             for (int i = 0; i < 7; i++) {
                 if (bord[i][5] == 0) {
                     int row = Main.getRow(bord, i);
                     bord[i][row] = 1;
-                    int score = miniMaxRec(bord, depth - 1, false);
+                    int score = miniMax(bord, depth - 1,alpha,beta, false, true);
                     bord[i][row] = 0;
                     if (score > bestScore) {
                         bestScore = score;
                         bestMove = i;
+                    }
+                    alpha=Math.max(alpha,score);
+                    if (beta<= alpha){
+                        break;
                     }
                 }
             }
@@ -31,57 +41,26 @@ public class Minimax {
                 if (bord[i][5] == 0) {
                     int row = Main.getRow(bord, i);
                     bord[i][row] = -1;
-                    int score = miniMaxRec(bord, depth - 1, true);
+                    int score = miniMax(bord, depth - 1,alpha,beta, true, true);
                     bord[i][row] = 0;
                     if (score < bestScore) {
                         bestScore = score;
                         bestMove = i;
                     }
-                }
-            }
-        }
-        return bestMove;
-
-
-    }
-
-    private int miniMaxRec(int[][] bord, int depth, boolean max) {
-        if (depth == 0 || Main.is_won(bord)) {
-            return evaluation.evaluate(bord, max);
-        }
-        int bestScore;
-
-
-        if (max) {
-            bestScore = -1000000;
-            for (int i = 0; i < 7; i++) {
-                if (bord[i][5] == 0) {
-                    int row = Main.getRow(bord, i);
-                    bord[i][row] = 1;
-                    int score = miniMaxRec(bord, depth - 1, false);
-                    bord[i][row] = 0;
-                    if (score > bestScore) {
-                        bestScore = score;
-                    }
-                }
-            }
-
-        } else {
-            bestScore = 1000000;
-            for (int i = 0; i < 7; i++) {
-                if (bord[i][5] == 0) {
-                    int row = Main.getRow(bord, i);
-                    bord[i][row] = -1;
-                    int score = miniMaxRec(bord, depth - 1, true);
-                    bord[i][row] = 0;
-                    if (score < bestScore) {
-                        bestScore = score;
+                    beta= Math.min(beta,score);
+                    if (beta<=alpha){
+                        break;
                     }
                 }
             }
         }
-        return bestScore;
 
 
+        return (isScore?bestScore:bestMove);
     }
+
+
+
+
+
 }
