@@ -5,7 +5,7 @@ import static java.lang.System.out;
 
 public class Game {
     Minimax minimax;
-    private int[][] gameBord = new int[7][6];
+    private int[][] gameBord = Main.newBord();
     int player;
     //int mode = getMode();
 
@@ -23,7 +23,7 @@ public class Game {
 
     private void game(int mode) {
         boolean gameContinues = true;
-        displayBord(new int[7][6]);
+        Main.displayBord(Main.newBord());
         while (gameContinues) {
             int[][] bord;
             bord = getGameBord();
@@ -35,7 +35,7 @@ public class Game {
             }
             bord[move][row] = player;
             if (Main.is_won(bord)) {
-                displayBord(bord);
+                Main.displayBord(bord);
                 out.println("Spieler " + (player == -1 ? 2 : 1) + " hat gewonnen!");
 
                 break;
@@ -46,7 +46,7 @@ public class Game {
                 int aiRow = Main.getRow(bord, aiMove);
                 bord[aiMove][aiRow] = player;
                 if (Main.is_won(bord)) {
-                    displayBord(bord);
+                    Main.displayBord(bord);
                     out.println("Spieler " + (player == -1 ? 2 : 1) + " hat gewonnen!");
 
                     break;
@@ -54,23 +54,25 @@ public class Game {
             }
 
 
-            displayBord(bord);
+            Main.displayBord(bord);
 
             player = (player == 1 ? -1 : 1);
             setGameBord(bord);
 
 
-            gameContinues = bordNotFinished(bord);
+            gameContinues = Main.bordNotFinished(bord);
         }
     }
 
     private int getMode() {
 
-        out.println("In welchem Modus möchtest du spielen?");
+        out.println("In welchem Modus möchtest du spielen?"); //todo Modi implementieren
         out.println("Mensch -> 1 | Computer ->2");
         Scanner scnanner = new Scanner(System.in);
         return Integer.parseInt(scnanner.next());
     }
+
+
 
     private int setPlayer() {
         return 1;
@@ -84,13 +86,7 @@ public class Game {
         this.gameBord = gameBord;
     }
 
-    private boolean bordNotFinished(int[][] bord) {
-        for (int i = 0; i < 7; i++) {
-            if (bord[i][5] == 0) return true;
-        }
 
-        return false;
-    }
 
     private int getMove(int player) {
         out.println("Spieler " + (player == -1 ? 2 : player) + " ist am Zug. ");
@@ -110,30 +106,4 @@ public class Game {
         }
     }
 
-
-    private void displayBord(int[][] bord) {
-        for (int i = 1; i < 8; i++) {
-            out.print(" " + i + "  ");
-        }
-        out.println();
-        for (int i = 5; i >= 0; i--) {
-            for (int j = 0; j < 7; j++) {
-                out.print("[");
-                switch (bord[j][i]) {
-                    case 1: {
-                        out.print("x");
-                        break;
-                    }
-                    case -1: {
-                        out.print("o");
-                        break;
-                    }
-                    default:
-                        out.print(" ");
-                }
-                out.print("] ");
-            }
-            out.println();
-        }
-    }
 }

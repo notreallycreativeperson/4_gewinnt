@@ -48,9 +48,10 @@ public class Evaluation {
                     int tempEval = bord[i][j];
                     for (int k = 1; k < 4; k++) {
                         if (bord[i + (k - 1)][j] == bord[i + k][j]) {
-
                             tempEval *= 4;
-                        } else break;
+                        } else if (bord[i + (k - 1)][j]==0&&bord[i + k][j]*tempEval>0){
+                            tempEval *=2;
+                        }else break;
                         eval_position += tempEval;
                     }
                 }
@@ -59,6 +60,8 @@ public class Evaluation {
                     for (int k = 1; k < 4; k++) {
                         if (bord[i + (k - 1)][j + (k - 1)] == bord[i + k][j + k]) {
                             tempEval *= 4;
+                        } else if (bord[i + (k - 1)][j + (k - 1)]==0&&bord[i + k][j + k]*tempEval>0){
+                            tempEval *=2;
                         } else break;
                         eval_position += tempEval;
                     }
@@ -68,6 +71,8 @@ public class Evaluation {
                     for (int k = 1; k < 4; k++) {
                         if (bord[i][j + (k - 1)] == bord[i][j + k]) {
                             tempEval *= 4;
+                        } else if (bord[i][j + (k - 1)]==0&&bord[i][j + k]*tempEval>0){
+                            tempEval *=2;
                         } else break;
                         eval_position += tempEval;
                     }
@@ -77,6 +82,8 @@ public class Evaluation {
                     for (int k = 1; k < 4; k++) {
                         if (bord[i - (k - 1)][j + (k - 1)] == bord[i - k][j + k]) {
                             tempEval *= 4;
+                        } else if (bord[i - (k - 1)][j + (k - 1)]==0&&bord[i - k][j + k]*tempEval>0){
+                            tempEval *=2;
                         } else break;
                         eval_position += tempEval;
                     }
